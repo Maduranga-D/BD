@@ -16,7 +16,7 @@
             display: flex; 
             justify-content: center; 
             align-items: center; 
-            overflow: hidden; 
+            overflow-x: hidden; 
             position: relative;
         }
 
@@ -27,14 +27,13 @@
             left: 0;
             width: 100%;
             height: 100%;
-            /* මෙතන තියෙන ලින්ක් එක වෙනුවට ඔයාගේ WhatsApp Image 2026-05-11 at 8.53.46 PM.jpeg ලින්ක් එක දාන්න */
             background-image: url('photo.jpeg'); 
             background-size: cover;
-            background-position: center;
-            filter: blur(12px); /* Blur ගාණ මෙතනින් වෙනස් කරන්න පුළුවන් */
-            -webkit-filter: blur(12px);
-            transform: scale(1.1); /* Edge එකේ සුදු පාට ගතිය මකන්න */
-            z-index: -1;
+            background-position: center center;
+            filter: blur(15px);
+            -webkit-filter: blur(15px);
+            transform: scale(1.1);
+            z-index: -2;
         }
 
         /* Dark overlay for readability */
@@ -44,7 +43,7 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(255, 240, 243, 0.4); /* Blur එක උඩින් යන ලස්සන soft tint එකක් */
+            background: rgba(0, 0, 0, 0.25); /* ෆොටෝ එක කැපිලා පේන්න ඩිංගක් dark කරා */
             z-index: -1;
         }
 
@@ -57,38 +56,46 @@
         .lock-box button:hover { background: #ff758f; }
         .error-msg { color: red; font-size: 0.85rem; margin-top: 5px; display: none; }
 
-        /* Surprise Content Card */
+        /* Surprise Content Card - Perfectly Centered and Balanced */
         #surpriseContent { 
             opacity: 0; 
             transform: scale(0.9); 
             transition: all 1s ease 0.5s; 
             text-align: center; 
-            max-width: 500px; 
+            max-width: 450px; 
             width: 90%; 
-            background: rgba(255, 255, 255, 0.85); /* Card එක transparent ගතියට තියෙන්නේ */
-            padding: 40px 20px; 
+            background: rgba(255, 255, 255, 0.75); /* වීදුරුවක් වගේ පේන්න transparent ගතිය වැඩි කරා */
+            padding: 35px 25px; 
             border-radius: 25px; 
-            box-shadow: 0 15px 35px rgba(255, 71, 126, 0.15); 
-            border: 2px solid rgba(255, 204, 213, 0.5); 
-            backdrop-filter: blur(10px); /* Card එක ඇතුලෙත් වීදුරුවක් වගේ blur ලුක් එකක් එනවා */
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15); 
+            border: 1px solid rgba(255, 255, 255, 0.4); 
+            backdrop-filter: blur(15px); 
+            -webkit-backdrop-filter: blur(15px);
             display: none; 
+            margin: auto;
         }
         
-        .main-title { font-family: 'Dancing Script', cursive; font-size: 3.5rem; color: #ff477e; margin-bottom: 20px; animation: pulse 2s infinite; }
-        @keyframes pulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.05); } }
+        .main-title { font-family: 'Dancing Script', cursive; font-size: 2.8rem; color: #ff477e; margin-bottom: 20px; animation: pulse 2s infinite; line-height: 1.2; }
+        @keyframes pulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.03); } }
         
-        /* Main Image Display inside card */
+        /* Main Image Display inside card - Fixed Squish Issue */
+        .gf-img-container {
+            width: 180px;
+            height: 180px;
+            margin: 0 auto 20px auto;
+            border-radius: 50%;
+            border: 5px solid #ff758f;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+            overflow: hidden;
+        }
         .gf-img { 
-            width: 180px; 
-            height: 180px; 
-            border-radius: 50%; 
-            object-fit: cover; 
-            border: 5px solid #ff758f; 
-            margin-bottom: 20px; 
-            box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+            width: 100%; 
+            height: 100%; 
+            object-fit: cover; /* ෆොටෝ එක තෙරපෙන්නේ නැතුව ලස්සනට මැදින් කැපිලා රවුමට සෙට් වෙනවා */
+            object-position: center 20%; /* මූණවල් දෙක හරියටම මැදට ගන්න position එක හැදුවා */
         }
         
-        .poem-box { font-size: 1.1rem; line-height: 1.8; color: #4a4a4a; font-style: italic; margin-bottom: 25px; white-space: pre-line; }
+        .poem-box { font-size: 1.05rem; line-height: 1.8; color: #333; font-weight: 500; font-style: italic; margin-bottom: 25px; white-space: pre-line; text-align: center; }
 
         /* Hearts Animation */
         .heart { position: fixed; font-size: 20px; color: #ff477e; animation: floatUp 4s linear infinite; bottom: -50px; z-index: 999; pointer-events: none; }
@@ -97,11 +104,9 @@
 </head>
 <body>
 
-    <!-- Background Layers -->
-    <div class="bg-blur" id="bgBlurLayer"></div>
+    <div class="bg-blur"></div>
     <div class="bg-overlay"></div>
 
-    <!-- Lock Screen -->
     <div id="lockScreen">
         <div class="lock-box">
             <h2>🔑 Enter the Secret Password</h2>
@@ -111,18 +116,18 @@
         </div>
     </div>
 
-    <!-- Surprise Section -->
     <div id="surpriseContent">
-        <!-- මෙතනටත් ඔයාගේ WhatsApp Image 2026-05-11 at 8.53.46 PM.jpeg ලින්ක් එකම දෙන්න එතකොට මැදත් පැහැදිලිව පේනවා -->
-        <img src="photo.jpeg" alt="Special One" class="gf-img" id="mainImg">
-        <h1 class="main-title">Happy Birthday!Prasadi Baboo! 🎂</h1>
+        <div class="gf-img-container">
+            <img src="photo.jpeg" alt="Special One" class="gf-img">
+        </div>
+        <h1 class="main-title">Happy Birthday!<br>Prasadi Baboo! 🎂</h1>
         <div class="poem-box">
             නෙතට නිවනක් දෙන ඔය සිනහව දකින්න,
             සදාකල් මගේ හිතේ ලඟින්ම ඉන්න,
             මේ උපන් දිනයේ හැම පැතුමක්ම ඉටුවෙන්න,
             ආදරෙයි රත්තරනේ මගේම වෙන්න! 💖
         </div>
-        <p style="color: #ff758f; font-weight: 600; font-size: 1.2rem;">✨ Infinite Love for You! ✨</p>
+        <p style="color: #ff477e; font-weight: 600; font-size: 1.1rem; letter-spacing: 1px;">✨ Infinite Love for You! ✨</p>
     </div>
 
     <script>
@@ -132,15 +137,6 @@
             {f: 261.63, d: 0.4}, {f: 261.63, d: 0.2}, {f: 523.25, d: 0.6}, {f: 440.00, d: 0.6}, {f: 349.23, d: 0.6}, {f: 329.63, d: 0.6}, {f: 293.66, d: 0.6},
             {f: 466.16, d: 0.4}, {f: 466.16, d: 0.2}, {f: 440.00, d: 0.6}, {f: 349.23, d: 0.6}, {f: 392.00, d: 0.6}, {f: 349.23, d: 1.2}
         ];
-
-        // [IMAGE LINK REPLACEMENT CONFIGURATION]
-        // ඔයාගේ 'WhatsApp Image 2026-05-11 at 8.53.46 PM.jpeg' එක upload කරලා එන ලින්ක් එක පහල තියෙන 'YOUR_IMAGE_URL_HERE' කියන තැනට දාන්න.
-        const myUploadedImage = "photo.jpeg"; 
-
-        if(myUploadedImage !== "YOUR_IMAGE_URL_HERE" && myUploadedImage.trim() !== "") {
-            document.getElementById('bgBlurLayer').style.backgroundImage = `url('${myUploadedImage}')`;
-            document.getElementById('mainImg').src = myUploadedImage;
-        }
 
         function playBirthdayTune() {
             const AudioContext = window.AudioContext || window.webkitAudioContext;
