@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Surprise! ✨</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Poppins:wght@300;400;600&display=swap');
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body { 
+            background: #fff0f3; 
+            font-family: 'Poppins', sans-serif; 
+            min-height: 100vh; 
+            display: flex; 
+            justify-content: center; 
+            align-items: center; 
+            overflow: hidden; 
+            position: relative;
+        }
+
+        /* Background Blurred Image Layer */
+        .bg-blur {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            /* මෙතන තියෙන ලින්ක් එක වෙනුවට ඔයාගේ WhatsApp Image 2026-05-11 at 8.53.46 PM.jpeg ලින්ක් එක දාන්න */
+            background-image: url('photo.jpeg'); 
+            background-size: cover;
+            background-position: center;
+            filter: blur(12px); /* Blur ගාණ මෙතනින් වෙනස් කරන්න පුළුවන් */
+            -webkit-filter: blur(12px);
+            transform: scale(1.1); /* Edge එකේ සුදු පාට ගතිය මකන්න */
+            z-index: -1;
+        }
+
+        /* Dark overlay for readability */
+        .bg-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 240, 243, 0.4); /* Blur එක උඩින් යන ලස්සන soft tint එකක් */
+            z-index: -1;
+        }
+
+        /* Lock Screen */
+        #lockScreen { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(135deg, #ffafbd, #ffc3a0); display: flex; flex-direction: column; justify-content: center; align-items: center; z-index: 9999; transition: all 0.8s ease; }
+        .lock-box { background: rgba(255, 255, 255, 0.9); padding: 40px 30px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); text-align: center; max-width: 350px; width: 90%; }
+        .lock-box h2 { color: #ff477e; margin-bottom: 15px; font-size: 1.4rem; }
+        .lock-box input { width: 100%; padding: 12px; border: 2px solid #ffb3c6; border-radius: 25px; text-align: center; font-size: 1.1rem; letter-spacing: 2px; outline: none; margin-bottom: 15px; }
+        .lock-box button { background: #ff477e; color: white; border: none; padding: 10px 25px; border-radius: 25px; font-size: 1rem; cursor: pointer; font-weight: 600; transition: 0.3s; }
+        .lock-box button:hover { background: #ff758f; }
+        .error-msg { color: red; font-size: 0.85rem; margin-top: 5px; display: none; }
+
+        /* Surprise Content Card */
+        #surpriseContent { 
+            opacity: 0; 
+            transform: scale(0.9); 
+            transition: all 1s ease 0.5s; 
+            text-align: center; 
+            max-width: 500px; 
+            width: 90%; 
+            background: rgba(255, 255, 255, 0.85); /* Card එක transparent ගතියට තියෙන්නේ */
+            padding: 40px 20px; 
+            border-radius: 25px; 
+            box-shadow: 0 15px 35px rgba(255, 71, 126, 0.15); 
+            border: 2px solid rgba(255, 204, 213, 0.5); 
+            backdrop-filter: blur(10px); /* Card එක ඇතුලෙත් වීදුරුවක් වගේ blur ලුක් එකක් එනවා */
+            display: none; 
+        }
+        
+        .main-title { font-family: 'Dancing Script', cursive; font-size: 3.5rem; color: #ff477e; margin-bottom: 20px; animation: pulse 2s infinite; }
+        @keyframes pulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.05); } }
+        
+        /* Main Image Display inside card */
+        .gf-img { 
+            width: 180px; 
+            height: 180px; 
+            border-radius: 50%; 
+            object-fit: cover; 
+            border: 5px solid #ff758f; 
+            margin-bottom: 20px; 
+            box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+        }
+        
+        .poem-box { font-size: 1.1rem; line-height: 1.8; color: #4a4a4a; font-style: italic; margin-bottom: 25px; white-space: pre-line; }
+
+        /* Hearts Animation */
+        .heart { position: fixed; font-size: 20px; color: #ff477e; animation: floatUp 4s linear infinite; bottom: -50px; z-index: 999; pointer-events: none; }
+        @keyframes floatUp { 0% { transform: translateY(0) scale(0) rotate(0deg); opacity: 1; } 100% { transform: translateY(-105vh) scale(1.3) rotate(360deg); opacity: 0; } }
+    </style>
+</head>
+<body>
+
+    <!-- Background Layers -->
+    <div class="bg-blur" id="bgBlurLayer"></div>
+    <div class="bg-overlay"></div>
+
+    <!-- Lock Screen -->
+    <div id="lockScreen">
+        <div class="lock-box">
+            <h2>🔑 Enter the Secret Password</h2>
+            <input type="text" id="passwordInput" placeholder="Password" maxlength="4">
+            <button onclick="checkPassword()">Unlock 💖</button>
+            <div class="error-msg" id="errorMsg">වැරදියි! නැවත උත්සාහ කරන්න. ✨</div>
+        </div>
+    </div>
+
+    <!-- Surprise Section -->
+    <div id="surpriseContent">
+        <!-- මෙතනටත් ඔයාගේ WhatsApp Image 2026-05-11 at 8.53.46 PM.jpeg ලින්ක් එකම දෙන්න එතකොට මැදත් පැහැදිලිව පේනවා -->
+        <img src="photo.jpeg" alt="Special One" class="gf-img" id="mainImg">
+        <h1 class="main-title">Happy Birthday!Prasadi Baboo! 🎂</h1>
+        <div class="poem-box">
+            නෙතට නිවනක් දෙන ඔය සිනහව දකින්න,
+            සදාකල් මගේ හිතේ ලඟින්ම ඉන්න,
+            මේ උපන් දිනයේ හැම පැතුමක්ම ඉටුවෙන්න,
+            ආදරෙයි රත්තරනේ මගේම වෙන්න! 💖
+        </div>
+        <p style="color: #ff758f; font-weight: 600; font-size: 1.2rem;">✨ Infinite Love for You! ✨</p>
+    </div>
+
+    <script>
+        const notes = [
+            {f: 261.63, d: 0.4}, {f: 261.63, d: 0.2}, {f: 293.66, d: 0.6}, {f: 261.63, d: 0.6}, {f: 349.23, d: 0.6}, {f: 329.63, d: 1.2},
+            {f: 261.63, d: 0.4}, {f: 261.63, d: 0.2}, {f: 293.66, d: 0.6}, {f: 261.63, d: 0.6}, {f: 392.00, d: 0.6}, {f: 349.23, d: 1.2},
+            {f: 261.63, d: 0.4}, {f: 261.63, d: 0.2}, {f: 523.25, d: 0.6}, {f: 440.00, d: 0.6}, {f: 349.23, d: 0.6}, {f: 329.63, d: 0.6}, {f: 293.66, d: 0.6},
+            {f: 466.16, d: 0.4}, {f: 466.16, d: 0.2}, {f: 440.00, d: 0.6}, {f: 349.23, d: 0.6}, {f: 392.00, d: 0.6}, {f: 349.23, d: 1.2}
+        ];
+
+        // [IMAGE LINK REPLACEMENT CONFIGURATION]
+        // ඔයාගේ 'WhatsApp Image 2026-05-11 at 8.53.46 PM.jpeg' එක upload කරලා එන ලින්ක් එක පහල තියෙන 'YOUR_IMAGE_URL_HERE' කියන තැනට දාන්න.
+        const myUploadedImage = "photo.jpeg"; 
+
+        if(myUploadedImage !== "YOUR_IMAGE_URL_HERE" && myUploadedImage.trim() !== "") {
+            document.getElementById('bgBlurLayer').style.backgroundImage = `url('${myUploadedImage}')`;
+            document.getElementById('mainImg').src = myUploadedImage;
+        }
+
+        function playBirthdayTune() {
+            const AudioContext = window.AudioContext || window.webkitAudioContext;
+            if (!AudioContext) return;
+            const ctx = new AudioContext();
+            let time = ctx.currentTime + 0.3;
+
+            function playMelody() {
+                notes.forEach(note => {
+                    const osc = ctx.createOscillator();
+                    const gain = ctx.createGain();
+                    osc.type = 'triangle';
+                    osc.frequency.value = note.f;
+                    gain.gain.setValueAtTime(0.15, time);
+                    gain.gain.exponentialRampToValueAtTime(0.001, time + note.d);
+                    osc.connect(gain);
+                    gain.connect(ctx.destination);
+                    osc.start(time);
+                    osc.stop(time + note.d);
+                    time += note.d + 0.05;
+                });
+                setTimeout(playMelody, (time - ctx.currentTime) * 1000);
+            }
+            playMelody();
+        }
+
+        function checkPassword() {
+            const password = document.getElementById('passwordInput').value.trim();
+            const lockScreen = document.getElementById('lockScreen');
+            const surpriseContent = document.getElementById('surpriseContent');
+            const errorMsg = document.getElementById('errorMsg');
+
+            if (password === '0708') {
+                playBirthdayTune();
+                lockScreen.style.opacity = '0';
+                setTimeout(() => {
+                    lockScreen.style.display = 'none';
+                    surpriseContent.style.display = 'block';
+                    setTimeout(() => {
+                        surpriseContent.style.opacity = '1';
+                        surpriseContent.style.transform = 'scale(1)';
+                    }, 50);
+                }, 800);
+                setInterval(createHeart, 300);
+            } else {
+                errorMsg.style.display = 'block';
+            }
+        }
+
+        function createHeart() {
+            const heart = document.createElement('div');
+            heart.classList.add('heart');
+            const heartTypes = ['❤️', '💖', '💝', '💕'];
+            heart.innerText = heartTypes[Math.floor(Math.random() * heartTypes.length)];
+            heart.style.left = Math.random() * 100 + 'vw';
+            heart.style.animationDuration = (Math.random() * 2 + 3) + 's';
+            document.body.appendChild(heart);
+            setTimeout(() => heart.remove(), 4000);
+        }
+    </script>
+</body>
+</html>
